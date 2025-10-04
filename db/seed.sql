@@ -1,32 +1,25 @@
 -- TTG Daily Workload Seed Data
 
--- Insert registration IDs
-INSERT INTO registration (registration_id) VALUES
-(74523),
-(84752),
-(86098),
-(86345),
-(86783),
-(89168),
-(89175),
-(90895),
-(91610),
-(92794);
+-- Insert statuses
+INSERT INTO statuses (`key`, name, at_risk) VALUES
+('documents_received', 'Documents Received', 0),
+('received_title', 'Received Title', 0),
+('send_docs_to_ttg', 'Send Docs to TTG', 0),
+('on_hold_qa', 'On Hold QA', 1),
+('ttg_sent_to_county', 'TTG Sent to County', 0),
+('successfully_sent_to_dmv', 'Successfully Sent to DMV', 0),
+('ws_correction_requested', 'WS Correction Requested', 0),
+('ws_correction_complete', 'WS Correction Complete', 0),
+('post_audit', 'Post Audit', 0);
 
--- Insert registration status history
-INSERT INTO registration_status_history (registration_id, status, date_created) VALUES
-(74523, 'Documents Received', '2024-04-19'),
-(74523, 'TTG sent to county', '2024-04-19'),
-(84752, 'On Hold- QA', '2024-07-24'),
-(84752, 'Send Docs to TTG', '2024-07-24'),
-(86098, 'On Hold- QA', '2024-08-06'),
-(86098, 'On Hold- QA', '2024-09-04'),
-(86345, 'Send Docs to TTG', '2024-08-09'),
-(86345, 'Documents Received', '2024-08-19'),
-(86783, 'On Hold- QA', '2024-08-14'),
-(86783, 'Send Docs to TTG', '2024-08-14'),
-(89168, 'Send Docs to TTG', '2024-09-06'),
-(89175, 'On Hold- QA', '2024-09-06'),
-(89175, 'On Hold- QA', '2024-09-06'),
-(89175, 'On Hold- QA', '2024-11-20');
-
+-- Insert mock daily counts for 2025-10-03
+INSERT INTO daily_counts (day, status_key, count) VALUES
+('2025-10-03', 'documents_received', 60),
+('2025-10-03', 'received_title', 20),
+('2025-10-03', 'send_docs_to_ttg', 40),
+('2025-10-03', 'on_hold_qa', 25),
+('2025-10-03', 'ttg_sent_to_county', 76),
+('2025-10-03', 'successfully_sent_to_dmv', 23),
+('2025-10-03', 'ws_correction_requested', 15),
+('2025-10-03', 'ws_correction_complete', 10),
+('2025-10-03', 'post_audit', 72);
