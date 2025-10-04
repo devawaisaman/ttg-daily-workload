@@ -14,16 +14,16 @@
             <h1>Daily Workload Dashboard</h1>
             <div class="date-picker">
                 <label for="dateInput">Date:</label>
-                <input type="date" id="dateInput" ng-model="date" ng-change="fetchStatusCounts()">
+                <input type="date" id="dateInput" ng-model="date" ng-change="loadCounts()">
             </div>
         </header>
 
         <main class="dashboard">
-            <div class="grid" ng-if="statusCounts.length > 0">
-                <div class="card" ng-repeat="item in statusCounts" ng-class="{'at-risk': item.atRisk}">
+            <div class="grid" ng-if="items.length > 0">
+                <div class="card" ng-repeat="item in items" ng-class="{'at-risk': item.atRisk}">
                     <div class="card-icon">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                            <use ng-href="#icon-{{getIconForStatus(item.key)}}"></use>
+                            <use ng-href="#icon-{{getIcon(item.key)}}"></use>
                         </svg>
                     </div>
                     <div class="card-content">
@@ -34,7 +34,7 @@
             </div>
 
             <div class="loading" ng-if="loading">
-                <p>Loading status counts...</p>
+                <p>Loading...</p>
             </div>
 
             <div class="error" ng-if="error">
