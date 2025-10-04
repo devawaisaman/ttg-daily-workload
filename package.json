@@ -1,0 +1,21 @@
+{
+  "name": "ttg-daily-workload",
+  "version": "1.0.0",
+  "description": "TTG Daily Workload management system",
+  "private": true,
+  "scripts": {
+    "dev:db": "docker compose -f db/docker-compose.yml up -d",
+    "dev:backend": "(cd backend && cp -n .env.example .env || true && npm run dev)",
+    "dev:frontend": "(cd frontend && cp -n .env.example .env || true && npm run dev)",
+    "lint": "cd backend && npm run lint",
+    "format": "cd backend && npm run format && cd ../frontend && npm run format",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "prepare": "simple-git-hooks"
+  },
+  "devDependencies": {
+    "simple-git-hooks": "^2.9.0"
+  },
+  "keywords": ["ttg", "workload", "dashboard", "express", "angularjs"],
+  "author": "devawaisaman <dev.awaisaman@gmail.com>",
+  "license": "MIT"
+}
