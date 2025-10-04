@@ -4,8 +4,8 @@ A comprehensive daily workload management system for tracking and organizing tas
 
 ## Stack
 
-- **Backend**: [To be defined]
-- **Frontend**: [To be defined]
+- **Backend**: Express.js + TypeScript
+- **Frontend**: AngularJS 1.8.3 + Vite
 - **Database**: MySQL 8.0
 - **Deployment**: [To be defined]
 
@@ -23,9 +23,24 @@ A comprehensive daily workload management system for tracking and organizing tas
    - User: root
    - Password: ttgpass
    - Database: ttg_dashboard
-4. Install dependencies
-5. Set up environment variables
-6. Run the development server
+4. Start the backend API:
+   ```bash
+   cd backend
+   npm install
+   cp .env.example .env
+   npm run dev
+   ```
+5. Start the frontend dashboard:
+   ```bash
+   cd frontend
+   npm install
+   cp .env.example .env
+   npm run dev
+   ```
+6. Test the API:
+   ```bash
+   curl "http://localhost:4000/api/status-counts?date=2025-10-03"
+   ```
 
 ## Scripts
 

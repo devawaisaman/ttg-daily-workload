@@ -6,12 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "cp -r . ../dist/frontend",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write ."
   },
   "devDependencies": {
+    "prettier": "^3.1.1",
     "vite": "^5.0.10"
   },
-  "keywords": ["ttg", "workload", "dashboard", "angularjs"],
+  "keywords": [
+    "ttg",
+    "workload",
+    "dashboard",
+    "angularjs"
+  ],
   "author": "devawaisaman <dev.awaisaman@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "simple-git-hooks": "^2.13.1"
+  }
 }

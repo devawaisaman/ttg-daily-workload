@@ -13,4 +13,3 @@ CREATE TABLE registration_status_history (
     INDEX(date_created),
     FOREIGN KEY (registration_id) REFERENCES registration(registration_id)
 );
-
