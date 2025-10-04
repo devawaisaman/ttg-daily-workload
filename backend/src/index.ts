@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { pool } from './db';
+import { getStatusCounts } from './routes/statusCounts';
 
 dotenv.config();
 
@@ -22,15 +23,7 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
-app.get('/api/status-counts', async (req, res) => {
-  try {
-    // Placeholder route - will implement actual logic later
-    res.json({ message: 'Status counts endpoint - coming soon' });
-  } catch (error) {
-    console.error('Error in status-counts route:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+app.get('/api/status-counts', getStatusCounts);
 
 // Start server
 app.listen(PORT, () => {
