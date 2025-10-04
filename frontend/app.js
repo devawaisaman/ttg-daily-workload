@@ -1,55 +1,87 @@
 angular.module('ttgApp', [])
   .service('apiService', function($http) {
-    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000';
+    const API_BASE = window.VITE_API_BASE || 'http://localhost:4000';
     
     this.getCounts = function(date) {
       return $http.get(`${API_BASE}/api/status-counts?date=${date}`);
     };
   })
   .controller('DashboardCtrl', function($scope, apiService) {
-    // Icon mapping constant
     const ICON_BY_KEY = {
-      'documents_received': 'doc',
-      'received_title': 'star',
-      'send_docs_to_ttg': 'upload',
-      'on_hold_qa': 'clock',
-      'ttg_sent_to_county': 'refresh',
-      'successfully_sent_to_dmv': 'bank',
-      'ws_correction_requested': 'clipboard-check',
-      'ws_correction_complete': 'checklist',
-      'post_audit': 'doc'
+      'Documents Received': 'file-alt',
+      'Received Title': 'star',
+      'Send Docs to TTG': 'upload',
+      'On Hold- QA': 'clock',
+      'TTG sent to county': 'sync-alt',
+      'Successfully Sent to DMV': 'university',
+      'WS correction requested': 'clipboard-list',
+      'WS Correction Complete': 'check-circle',
+      'Post Audit': 'file-invoice'
     };
 
-    // Initialize date to default
-    $scope.date = '2025-10-03';
+    // Set today's date as default
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    $scope.date = todayString;
     $scope.items = [];
     $scope.loading = false;
     $scope.error = null;
+    $scope.selectedCard = null;
 
-    // Get icon for status key
-    $scope.getIcon = function(key) {
-      return ICON_BY_KEY[key] || 'doc';
+    $scope.getIcon = function(name) {
+      return ICON_BY_KEY[name] || 'doc';
     };
 
-    // Load counts from API
+    $scope.selectCard = function(index) {
+      $scope.selectedCard = $scope.selectedCard === index ? null : index;
+    };
+
+    $scope.formatDate = function(date) {
+      if (!date) return null;
+      
+      if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return date;
+      }
+      
+      const d = new Date(date);
+      if (isNaN(d.getTime())) {
+        return null;
+      }
+      
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      
+      return `${year}-${month}-${day}`;
+    };
+
     $scope.loadCounts = function() {
       if (!$scope.date) return;
+      
+      const formattedDate = $scope.formatDate($scope.date);
+      if (!formattedDate) {
+        $scope.error = 'Invalid date format. Please use YYYY-MM-DD format.';
+        return;
+      }
       
       $scope.loading = true;
       $scope.error = null;
       
-      apiService.getCounts($scope.date)
+      apiService.getCounts(formattedDate)
         .then(function(response) {
           $scope.items = response.data.items || [];
           $scope.loading = false;
+          
+          // Select first card by default if items exist
+          if ($scope.items.length > 0) {
+            $scope.selectedCard = 0;
+          }
         })
         .catch(function(error) {
-          console.error('Error fetching counts:', error);
-          $scope.error = 'Failed to load data';
+          $scope.error = 'Failed to load data: ' + (error.data?.error || error.statusText || 'Unknown error');
           $scope.loading = false;
         });
     };
 
-    // Initial load
     $scope.loadCounts();
   });

@@ -6,6 +6,7 @@
     <title>TTG Daily Workload Dashboard</title>
     <base href="/">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 </head>
 <body ng-controller="DashboardCtrl">
@@ -19,20 +20,6 @@
         </header>
 
         <main class="dashboard">
-            <div class="grid" ng-if="items.length > 0">
-                <div class="card" ng-repeat="item in items" ng-class="{'at-risk': item.atRisk}">
-                    <div class="card-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                            <use ng-href="#icon-{{getIcon(item.key)}}"></use>
-                        </svg>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">{{item.name}}</h3>
-                        <div class="card-count">{{item.count}}</div>
-                    </div>
-                </div>
-            </div>
-
             <div class="loading" ng-if="loading">
                 <p>Loading...</p>
             </div>
@@ -40,23 +27,34 @@
             <div class="error" ng-if="error">
                 <p>{{error}}</p>
             </div>
+
+            <div class="empty-state" ng-if="!loading && !error && items.length === 0">
+                <p>No data available for the selected date.</p>
+            </div>
+
+            <div class="grid" ng-if="!loading && !error && items.length > 0">
+                <div class="card" ng-repeat="item in items" 
+                     ng-class="{'selected': selectedCard === $index}"
+                     ng-click="selectCard($index)">
+                    <div class="card-content">
+                        <h3 class="card-title">{{item.name}}</h3>
+                        <div class="card-bottom">
+                            <div class="card-icon">
+                                <i class="fas fa-{{getIcon(item.name)}}"></i>
+                            </div>
+                            <div class="card-count">{{item.count}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
-    <!-- SVG Icons -->
-    <svg style="display: none;">
-        <defs>
-            <g id="icon-doc"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></g>
-            <g id="icon-star"><path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/></g>
-            <g id="icon-upload"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z M12,12L16,16H13.5V19H10.5V16H8L12,12Z"/></g>
-            <g id="icon-clock"><path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/></g>
-            <g id="icon-refresh"><path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"/></g>
-            <g id="icon-bank"><path d="M11.5,1L2,6V8H21V6M4,10V19H6V17H18V19H20V10M8,12H10V15H8V12M12,12H14V15H12V12M16,12H18V15H16V12Z"/></g>
-            <g id="icon-clipboard-check"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z"/></g>
-            <g id="icon-checklist"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></g>
-        </defs>
-    </svg>
 
+    <script>
+        // Inject environment variables
+        window.VITE_API_BASE = 'http://localhost:4000';
+    </script>
     <script src="app.js"></script>
 </body>
 </html>

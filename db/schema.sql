@@ -1,17 +1,18 @@
 -- TTG Daily Workload Database Schema
 
-CREATE TABLE statuses (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    `key` VARCHAR(64) UNIQUE NOT NULL,
-    name VARCHAR(128) NOT NULL,
-    at_risk BOOLEAN DEFAULT 0
+-- Registration table (from TABLES(REGISTRATIONS).csv)
+CREATE TABLE registration (
+    registration_id INT PRIMARY KEY
 );
 
-CREATE TABLE daily_counts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    day DATE NOT NULL,
-    status_key VARCHAR(64) NOT NULL,
-    count INT NOT NULL,
-    INDEX(day),
-    FOREIGN KEY (status_key) REFERENCES statuses(`key`)
+-- Registration status history table (from TABLES(REGISTRATION STATUS HISTORY).csv)
+CREATE TABLE registration_status_history (
+    registration_status_id INT AUTO_INCREMENT PRIMARY KEY,
+    registration_id INT NOT NULL,
+    status VARCHAR(128) NOT NULL,
+    date_created DATE NOT NULL,
+    INDEX(registration_id),
+    INDEX(date_created),
+    INDEX(status),
+    FOREIGN KEY (registration_id) REFERENCES registration(registration_id)
 );
