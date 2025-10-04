@@ -1,0 +1,17 @@
+{
+  "name": "ttg-daily-workload-frontend",
+  "version": "1.0.0",
+  "description": "Frontend dashboard for TTG Daily Workload management system",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "cp -r . ../dist/frontend",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10"
+  },
+  "keywords": ["ttg", "workload", "dashboard", "angularjs"],
+  "author": "devawaisaman <dev.awaisaman@gmail.com>",
+  "license": "MIT"
+}
