@@ -6,15 +6,26 @@ A comprehensive daily workload management system for tracking and organizing tas
 
 - **Backend**: [To be defined]
 - **Frontend**: [To be defined]
-- **Database**: [To be defined]
+- **Database**: MySQL 8.0
 - **Deployment**: [To be defined]
 
 ## Local Setup
 
 1. Clone the repository
-2. Install dependencies
-3. Set up environment variables
-4. Run the development server
+2. Start the database:
+   ```bash
+   cd db
+   docker compose up -d
+   ```
+3. Database connection details:
+   - Host: 127.0.0.1
+   - Port: 3306
+   - User: root
+   - Password: ttgpass
+   - Database: ttg_dashboard
+4. Install dependencies
+5. Set up environment variables
+6. Run the development server
 
 ## Scripts
 
