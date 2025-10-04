@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "cp -r . ../dist/frontend",
+    "build": "echo 'Static files ready for deployment'",
     "preview": "vite preview",
     "format": "prettier --write ."
   },
