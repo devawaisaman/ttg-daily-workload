@@ -9,11 +9,14 @@ const dbConfig = {
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'ttgpass',
   database: process.env.DB_NAME || 'ttg_dashboard',
+};
+
+// Create pooled connection for local development
+export const pool = mysql.createPool({
+  ...dbConfig,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-};
-
-export const pool = mysql.createPool(dbConfig);
+});
 
 export default pool;

@@ -35,15 +35,15 @@ export const getStatusCounts = async (req: Request, res: Response): Promise<void
     }
 
     const query = `
-      SELECT 
+      SELECT
         status as status_key,
         status as name,
-        CASE 
-          WHEN status = 'On Hold- QA' THEN 1 
-          ELSE 0 
+        CASE
+          WHEN status = 'On Hold- QA' THEN 1
+          ELSE 0
         END as at_risk,
         COUNT(*) as count
-      FROM registration_status_history 
+      FROM registration_status_history
       WHERE DATE(date_created) = ?
       GROUP BY status
       ORDER BY status
@@ -52,17 +52,13 @@ export const getStatusCounts = async (req: Request, res: Response): Promise<void
     const [rows] = await pool.execute(query, [date]);
 
     const items: StatusCountItem[] = (rows as any[]).map(row => ({
-      key: row.key,
+      key: row.status_key,
       name: row.name,
       count: parseInt(row.count),
       atRisk: Boolean(row.at_risk)
     }));
 
-    const response: StatusCountsResponse = {
-      date,
-      items
-    };
-
+    const response: StatusCountsResponse = { date, items };
     res.json(response);
 
   } catch (error) {

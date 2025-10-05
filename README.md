@@ -19,32 +19,41 @@ npm run dev:db
 cd backend && cp .env.example .env && npm i && npm run dev
 ```
 
-### 3. Frontend Development
+### 3. Setup Database (First Time Only)
+```bash
+# Create database schema
+curl -X POST "http://localhost:4000/api/setup-db"
+
+# Import CSV data (1,825 registrations + 5,790 status records)
+curl -X POST "http://localhost:4000/api/import-data"
+```
+
+### 4. Frontend Development
 ```bash
 cd frontend && cp .env.example .env && npm i && npm run dev
 ```
 
-### 4. Test API
+### 5. Test API
 ```bash
-curl "http://localhost:4000/api/status-counts?date=2025-10-03"
+curl "http://localhost:4000/api/status-counts?date=2024-07-24"
 ```
 
 **Expected Response:**
 ```json
 {
-  "date": "2025-10-03",
+  "date": "2024-07-24",
   "items": [
     {
-      "key": "documents_received",
-      "name": "Documents Received",
-      "count": 60,
-      "atRisk": false
+      "key": "On Hold- QA",
+      "name": "On Hold- QA",
+      "count": 1,
+      "atRisk": true
     },
     {
-      "key": "on_hold_qa",
-      "name": "On Hold QA",
-      "count": 25,
-      "atRisk": true
+      "key": "Send Docs to TTG",
+      "name": "Send Docs to TTG",
+      "count": 1,
+      "atRisk": false
     }
   ]
 }
@@ -158,125 +167,3 @@ ORDER BY status;
 - `npm run build` - Build static files
 - `npm run preview` - Preview built files
 - `npm run format` - Format with Prettier
-
-## Troubleshooting
-
-### MySQL Connection Issues
-- **Error**: `ECONNREFUSED` - Database not running
-  - **Solution**: Run `npm run dev:db` and wait for container to start
-- **Error**: `Access denied for user 'root'` - Wrong credentials
-  - **Solution**: Check `.env` file matches docker-compose.yml settings
-
-### CORS Issues
-- **Error**: `CORS policy` in browser console
-  - **Solution**: Verify `ALLOWED_ORIGIN` in backend `.env` matches frontend URL
-  - **Default**: `http://localhost:5173` for frontend, `http://localhost:4000` for backend
-
-### Date Format Issues
-- **Error**: `Invalid date format` from API
-  - **Solution**: Use YYYY-MM-DD format (e.g., `2025-10-03`)
-  - **Valid**: `2025-10-03`, `2024-12-25`
-  - **Invalid**: `10/03/2025`, `2025-10-3`, `03-10-2025`
-
-### Frontend Not Loading Data
-- **Check**: Browser network tab for API calls
-- **Check**: Backend console for errors
-- **Check**: Database connection and data existence
-
-## Deploy
-
-### Vercel Deployment
-
-#### Backend (Serverless API)
-
-1. **Create Vercel Project:**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "New Project"
-   - Import your repository
-   - Set **Root Directory** to `/backend`
-   - Project name: `ttg-daily-workload-backend`
-
-2. **Set Environment Variables:**
-   ```
-   DB_HOST=your-database-host
-   DB_PORT=3306
-   DB_USER=your-database-user
-   DB_PASSWORD=your-database-password
-   DB_NAME=ttg_dashboard
-   ALLOWED_ORIGIN=https://your-frontend-url.vercel.app
-   ```
-
-3. **Deploy:**
-   - Vercel will automatically deploy on push to main branch
-   - API will be available at: `https://ttg-daily-workload-backend.vercel.app/api/status-counts`
-
-#### Frontend (Static Site)
-
-1. **Create Vercel Project:**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "New Project"
-   - Import your repository
-   - Set **Root Directory** to `/frontend`
-   - Project name: `ttg-daily-workload-frontend`
-
-2. **Set Environment Variables:**
-   ```
-   VITE_API_BASE=https://ttg-daily-workload-backend.vercel.app
-   ```
-
-3. **Deploy:**
-   - Vercel will automatically deploy on push to main branch
-   - Frontend will be available at: `https://ttg-daily-workload-frontend.vercel.app`
-
-#### Environment Variables Checklist
-
-**Backend Vercel Project:**
-- [ ] `DB_HOST` - Your production database host
-- [ ] `DB_PORT` - Database port (usually 3306)
-- [ ] `DB_USER` - Database username
-- [ ] `DB_PASSWORD` - Database password
-- [ ] `DB_NAME` - Database name (ttg_dashboard)
-- [ ] `ALLOWED_ORIGIN` - Frontend Vercel URL
-
-**Frontend Vercel Project:**
-- [ ] `VITE_API_BASE` - Backend Vercel URL
-
-#### Database Setup
-
-For production, you'll need to:
-1. Set up a MySQL database (e.g., PlanetScale, Railway, or AWS RDS)
-2. Run the schema and seed scripts from `/db/` folder
-3. Update the backend environment variables with your production database credentials
-
-## Technical Approach
-
-### Why AngularJS 1.8.3?
-- **Legacy compatibility**: Many enterprise environments still use AngularJS
-- **Simple data binding**: Perfect for dashboard-style applications
-- **No build complexity**: Works directly in browser with CDN
-- **Familiar patterns**: Easy for teams already using AngularJS
-
-### Why Simple Express + TypeScript?
-- **Type safety**: TypeScript prevents runtime errors
-- **Minimal overhead**: Express is lightweight and fast
-- **Easy deployment**: Works well with serverless platforms
-- **Familiar patterns**: Standard REST API approach
-
-### Why Raw SQL?
-- **Performance**: Direct SQL queries are faster than ORMs
-- **Transparency**: Easy to understand and debug
-- **Flexibility**: Can optimize queries for specific use cases
-- **Simplicity**: No additional abstraction layer
-
-### Brand Palette
-- **Primary Blue**: `#082240` - TTG brand dark blue
-- **Accent Red**: `#EC1C24` - TTG brand red for at-risk items
-- **Typography**: "Gotham", "Montserrat", "Helvetica Neue", Arial, sans-serif
-- **Design**: Clean, professional, enterprise-focused
-
-### Architecture Decisions
-- **Monorepo structure**: Easy to manage related frontend/backend
-- **Environment-based config**: Works across dev/staging/production
-- **Docker for local DB**: Consistent development environment
-- **Vercel deployment**: Serverless backend + static frontend
-- **Pre-commit hooks**: Code quality enforcement

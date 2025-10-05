@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { pool } from './db';
 import { getStatusCounts } from './routes/statusCounts';
+import { importSampleData, setupDatabase } from './routes/import';
 
 dotenv.config();
 
@@ -29,11 +30,15 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.get('/api/status-counts', getStatusCounts);
+app.post('/api/setup-db', setupDatabase);
+app.post('/api/import-data', importSampleData);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-});
+// Start server only in local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/health`);
+  });
+}
 
 export default app;
