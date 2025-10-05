@@ -52,8 +52,11 @@
 
 
     <script>
-        // Inject environment variables
-        window.VITE_API_BASE = 'http://localhost:4000';
+        // Auto-detect API base URL based on environment
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+        window.VITE_API_BASE = isProduction 
+            ? 'https://ttg-daily-workload-backend.vercel.app'
+            : 'http://localhost:4000';
     </script>
     <script src="app.js"></script>
 </body>
