@@ -16,6 +16,7 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:5174',
     'http://localhost:5175',
+    'https://ttg-daily-workload-jvhj-git-master-awais-projects-7b37aa21.vercel.app',
     'https://ttg-daily-workload-jvhj.vercel.app',
     'https://ttg-daily-workload-frontend.vercel.app',
     process.env.ALLOWED_ORIGIN || 'http://localhost:5173'
