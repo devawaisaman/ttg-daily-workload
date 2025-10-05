@@ -100,6 +100,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error('Database error in status-counts:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Database config:', {
+      host: dbConfig.host,
+      port: dbConfig.port,
+      user: dbConfig.user,
+      database: dbConfig.database,
+      hasPassword: !!dbConfig.password
+    });
+    res.status(500).json({ 
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error',
+      config: {
+        host: dbConfig.host,
+        port: dbConfig.port,
+        user: dbConfig.user,
+        database: dbConfig.database
+      }
+    });
   }
 }
